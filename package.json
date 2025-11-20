@@ -1,0 +1,19 @@
+{
+  "name": "pl_mcp",
+  "version": "1.0.0",
+  "description": "Playwright testing project with MCP integration",
+  "main": "index.js",
+  "scripts": {
+    "test:digidates": "playwright test tests/api/digidates-api.spec.js",
+    "test:contact": "playwright test tests/skipper-contact-form.spec.js",
+    "test:all": "playwright test",
+    "build": "echo \"No build process needed\""
+  },
+  "keywords": ["playwright", "testing", "automation"],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
