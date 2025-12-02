@@ -1,4 +1,5 @@
-import { expect, APIRequestContext, APIResponse } from '@playwright/test';
+import { expect, type APIRequestContext, type APIResponse } from '@playwright/test';
+import { EnvironmentFactory } from '@/config/env/EnvironmentFactory';
 
 export interface TestData {
   currentYear: string;
@@ -21,16 +22,22 @@ export class DigiDatesApi {
   private request: APIRequestContext;
   private baseURL: string;
   private headers: Record<string, string>;
+  private environment = EnvironmentFactory.create();
 
-  constructor(request: APIRequestContext, baseURL: string = 'https://digidates.de/api/v1') {
+  constructor(request: APIRequestContext) {
     this.request = request;
-    this.baseURL = baseURL;
+    this.baseURL = this.environment.apiBaseUrl;
     this.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     };
   }
 
+  /**
+   * Gets Unix timestamp and validates the response structure
+   * @param timestamp - Optional timestamp parameter for conversion
+   * @returns Promise resolving to Unix time as number
+   */
   async getUnixTimeAndValidate(timestamp?: string): Promise<number> {
     let url = `${this.baseURL}/unixtime`;
     if (timestamp) {
@@ -40,7 +47,6 @@ export class DigiDatesApi {
     
     const response = await this.request.get(url, { headers: this.headers });
     const responseBody = await response.json();
-    console.log('Unix Time Response:', JSON.stringify(responseBody));
     
     expect(response.status()).toBe(200);
     expect(responseBody).toHaveProperty('time');
@@ -50,11 +56,15 @@ export class DigiDatesApi {
     return responseBody.time;
   }
 
+  /**
+   * Checks if a given year is a leap year and validates the response
+   * @param year - Year to check as string
+   * @returns Promise resolving to boolean indicating if year is leap year
+   */
   async checkLeapYearAndValidate(year: string): Promise<boolean> {
     const params = new URLSearchParams({ year });
     const response = await this.request.get(`${this.baseURL}/leapyear?${params}`, { headers: this.headers });
     const responseBody = await response.json();
-    console.log('Leap Year Response:', JSON.stringify(responseBody));
     
     expect(response.status()).toBe(200);
     expect(responseBody).toHaveProperty('leapyear');
@@ -63,10 +73,14 @@ export class DigiDatesApi {
     return responseBody.leapyear;
   }
 
+  /**
+   * Calculates age from birth date and validates the response structure
+   * @param date - Birth date in YYYY-MM-DD format
+   * @returns Promise resolving to AgeData with calculated age
+   */
   async calculateAgeAndValidate(date: string): Promise<AgeData> {
     const response = await this.request.get(`${this.baseURL}/age/${date}`, { headers: this.headers });
     const responseBody = await response.json();
-    console.log('Age Calculation Response:', JSON.stringify(responseBody));
     
     expect(response.status()).toBe(200);
     expect(responseBody).toHaveProperty('age');
@@ -76,6 +90,10 @@ export class DigiDatesApi {
     return responseBody;
   }
 
+  /**
+   * Generates test data with predefined values for API testing
+   * @returns TestData object with current year, leap years, and test dates
+   */
   generateTestData(): TestData {
     return {
       currentYear: new Date().getFullYear().toString(),

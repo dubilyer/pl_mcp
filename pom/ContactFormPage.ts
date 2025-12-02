@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from '@/pom/BasePage';
 
 export class ContactFormPage extends BasePage {

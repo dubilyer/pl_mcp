@@ -1,5 +1,6 @@
-import { expect, Page, Locator } from '@playwright/test';
+import { expect, type Page, type Locator } from '@playwright/test';
 import { BasePage } from '@/pom/BasePage';
+import { EnvironmentFactory } from '@/config/env/EnvironmentFactory';
 
 export class CoreServicesPage extends BasePage {
   private pageTitle: Locator;
@@ -27,6 +28,7 @@ export class CoreServicesPage extends BasePage {
   private stat45Percent: Locator;
   private stat35Percent: Locator;
   private stat70Percent: Locator;
+  private environment = EnvironmentFactory.create();
 
   constructor(page: Page) {
     super(page);
@@ -71,7 +73,7 @@ export class CoreServicesPage extends BasePage {
   }
 
   async navigate(): Promise<void> {
-    await this.page.goto('https://www.skipper-soft.com/solutions-services/');
+    await this.page.goto(`${this.environment.baseUrl}/solutions-services/`);
     await this.waitForPageLoad();
   }
 
