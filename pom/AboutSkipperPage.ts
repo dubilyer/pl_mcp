@@ -1,16 +1,25 @@
-import { expect } from '@playwright/test';
+import { expect, Page, Locator } from '@playwright/test';
+import { BasePage } from '@/pom/BasePage';
 
-export class AboutSkipperPage {
-  constructor(page) {
-    this.page = page;
+export class AboutSkipperPage extends BasePage {
+  private pageTitle: Locator;
+  private meetSkipperSoftHeading: Locator;
+  private mainTagline: Locator;
+  private companyDescription: Locator;
+  private yearsOfExperience: Locator;
+  private yearsOfExperienceLabel: Locator;
+  private aboutUsSection: Locator;
+  private missionSection: Locator;
+  private visionSection: Locator;
+
+  constructor(page: Page) {
+    super(page);
     
     // Header elements
-    this.pageTitle = page.getByText('About SKIPPER');
-    this.breadcrumb = page.locator('.breadcrumb, nav[aria-label="breadcrumb"]');
-    this.homeLink = page.getByText('Home');
+    this.pageTitle = page.getByRole('heading', { name: /about skipper/i });
     
     // Main content
-    this.meetSkipperSoftHeading = page.getByText('Meet Skipper Soft');
+    this.meetSkipperSoftHeading = page.getByRole('heading', { name: /meet skipper soft/i });
     this.mainTagline = page.getByText('WE\'RE NOT JUST AUTOMATING TESTS — WE\'RE BUILDING CONFIDENCE.');
     this.companyDescription = page.getByText('We help fast-moving tech teams navigate the complexity of software quality');
     
@@ -18,61 +27,45 @@ export class AboutSkipperPage {
     this.yearsOfExperience = page.getByText('12+');
     this.yearsOfExperienceLabel = page.getByText('years of expertise');
     
-    // About us section
+    // Mission and vision sections
     this.aboutUsSection = page.getByText('About us');
-    this.aboutUsImages = page.locator('.about-images, .company-images');
-    
-    // Values/Mission sections (if present)
-    this.valuesSection = page.locator('.values-section, .mission-section');
-    this.teamSection = page.locator('.team-section, .our-team');
+    this.missionSection = page.getByText('Our mission');
+    this.visionSection = page.getByText('Our vision');
   }
 
-  async navigate() {
+  async navigate(): Promise<void> {
     await this.page.goto('https://www.skipper-soft.com/about-skipper/');
+    await this.waitForPageLoad();
   }
 
-  async navigateFromHome(homePage) {
-    await homePage.navigateToAbout();
-  }
-
-  async waitForPageLoad() {
-    await this.page.waitForLoadState('networkidle');
-  }
-
-  async verifyPageTitle() {
+  async verifyPageTitle(): Promise<void> {
     await expect(this.page).toHaveTitle(/About|Skipper/);
   }
 
-  async verifyPageHeading() {
+  async verifyPageHeading(): Promise<void> {
     await expect(this.pageTitle).toBeVisible();
     await expect(this.meetSkipperSoftHeading).toBeVisible();
   }
 
-  async verifyBreadcrumb() {
+  async verifyBreadcrumb(): Promise<void> {
     await expect(this.homeLink).toBeVisible();
   }
 
-  async verifyMainContent() {
+  async verifyMainContent(): Promise<void> {
     await expect(this.mainTagline).toBeVisible();
     await expect(this.companyDescription).toBeVisible();
   }
 
-  async verifyCompanyStatistics() {
+  async verifyCompanyStatistics(): Promise<void> {
     await expect(this.yearsOfExperience).toBeVisible();
     await expect(this.yearsOfExperienceLabel).toBeVisible();
   }
 
-  async verifyAboutUsSection() {
+  async verifyAboutUsSection(): Promise<void> {
     await expect(this.aboutUsSection).toBeVisible();
   }
 
-  async scrollToBottomOfPage() {
-    await this.page.evaluate(() => {
-      window.scrollTo(0, document.body.scrollHeight);
-    });
-  }
-
-  async verifyFullPage() {
+  async verifyFullPage(): Promise<void> {
     await this.verifyPageTitle();
     await this.verifyPageHeading();
     await this.verifyBreadcrumb();

@@ -1,15 +1,28 @@
-import { expect } from '@playwright/test';
-import { BasePage } from './BasePage.js';
+import { expect, Page, Locator } from '@playwright/test';
+import { BasePage } from '@/pom/BasePage';
 
 export class SkipperHomePage extends BasePage {
-  constructor(page) {
+  private mainHeading: Locator;
+  private subHeading: Locator;
+  private frameworksText: Locator;
+  private startJourneyButton: Locator;
+  private stat50Percent: Locator;
+  private escapeBerugsReduction: Locator;
+  private stat30Percent: Locator;
+  private rootCauseAnalysisTime: Locator;
+  private stat83Percent: Locator;
+  private testExecutionTimeReduction: Locator;
+  private fastSolutionDelivery: Locator;
+  private deliveryTimeframe: Locator;
+
+  constructor(page: Page) {
     super(page);
     
     // Main content locators specific to home page
-    this.mainHeading = page.getByText('Boosting Quality Without Compromising Delivery');
+    this.mainHeading = page.getByRole('heading', { name: /boosting quality without compromising delivery/i });
     this.subHeading = page.getByText('PEOPLE. PROCESSES. TECHNOLOGIES.');
     this.frameworksText = page.getByText('Frameworks tailored to your stack');
-    this.startJourneyButton = page.getByText('Start the Journey');
+    this.startJourneyButton = page.getByRole('link', { name: /start the journey/i });
     
     // Statistics locators - Home page metrics
     this.stat50Percent = page.getByText('50%');
@@ -19,32 +32,25 @@ export class SkipperHomePage extends BasePage {
     this.stat83Percent = page.getByText('83%');
     this.testExecutionTimeReduction = page.getByText('Reduction of Test Execution Time');
     this.fastSolutionDelivery = page.getByText('Fast Solution Delivery');
-    this.threeWeeksText = page.getByText('3').first();
-    this.weeksText = page.getByText('weeks');
-    
-    // Client logos section
-    this.clientLogosSection = page.locator('.client-logos, .clients-section');
+    this.deliveryTimeframe = page.getByText('3 weeks', { exact: false });
   }
 
-  async navigate() {
+  async navigate(): Promise<void> {
     await this.page.goto('https://www.skipper-soft.com');
+    await this.waitForPageLoad();
   }
 
-  async waitForPageLoad() {
-    await this.page.waitForLoadState();
-  }
-
-  async verifyPageTitle() {
+  async verifyPageTitle(): Promise<void> {
     await expect(this.page).toHaveTitle(/Skipper/);
   }
 
-  async verifyMainContent() {
+  async verifyMainContent(): Promise<void> {
     await expect(this.mainHeading).toBeVisible();
     await expect(this.startJourneyButton).toBeVisible();
     await expect(this.skipperLogo).toBeVisible();
   }
 
-  async verifyStatistics() {
+  async verifyStatistics(): Promise<void> {
     // Verify 50% statistics
     await expect(this.stat50Percent).toBeVisible();
     await expect(this.escapeBerugsReduction).toBeVisible();
@@ -58,16 +64,16 @@ export class SkipperHomePage extends BasePage {
     await expect(this.testExecutionTimeReduction).toBeVisible();
   }
 
-  async verifyDeliveryInfo() {
+  async verifyDeliveryInfo(): Promise<void> {
     await expect(this.fastSolutionDelivery).toBeVisible();
-    await expect(this.threeWeeksText).toBeVisible();
+    await expect(this.deliveryTimeframe).toBeVisible();
   }
 
-  async clickStartJourney() {
+  async clickStartJourney(): Promise<void> {
     await this.startJourneyButton.click();
   }
 
-  async verifyFullPage() {
+  async verifyFullPage(): Promise<void> {
     await this.verifyPageTitle();
     await this.verifyMainContent();
     await this.verifyStatistics();
