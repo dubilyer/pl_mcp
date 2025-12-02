@@ -4,8 +4,8 @@
   "description": "Playwright testing project with MCP integration",
   "main": "index.js",
   "scripts": {
-    "test:digidates": "playwright test tests/api/digidates-api.spec.js",
-    "test:contact": "playwright test tests/skipper-contact-form.spec.js",
+    "test:digidates": "playwright test tests/api/digidates-api.spec.ts",
+    "test:contact": "playwright test tests/web/skipper-contact-form.spec.ts",
     "test:all": "playwright test",
     "build": "echo \"No build process needed\""
   },
@@ -14,6 +14,9 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.40.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@faker-js/faker": "^8.4.1"
   }
 }
