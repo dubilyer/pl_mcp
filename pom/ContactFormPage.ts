@@ -1,57 +1,57 @@
-import { type Page, type Locator } from '@playwright/test';
-import { BasePage } from '@/pom/BasePage';
-import { EnvironmentFactory } from '@/config/env/EnvironmentFactory';
+import {type Page, type Locator} from '@playwright/test';
+import {BasePage} from '@/pom/BasePage';
+import {EnvironmentFactory} from '@/config/env/EnvironmentFactory';
 
 export class ContactFormPage extends BasePage {
-  private nameField: Locator;
-  private emailField: Locator;
-  private phoneField: Locator;
-  private companyField: Locator;
-  private messageField: Locator;
-  private privacyCheckbox: Locator;
-  private submitButton: Locator;
-  private recaptchaError: Locator;
-  private successMessage: Locator;
-  
-  private environment = EnvironmentFactory.create();
+    private nameField: Locator;
+    private emailField: Locator;
+    private phoneField: Locator;
+    private companyField: Locator;
+    private messageField: Locator;
+    private privacyCheckbox: Locator;
+    private submitButton: Locator;
+    private recaptchaError: Locator;
+    private successMessage: Locator;
 
-  constructor(page: Page) {
-    super(page);
-    
-    // ARIA locators based on website exploration findings
-    this.nameField = page.getByRole('textbox', { name: 'Name*', exact: true });
-    this.emailField = page.getByRole('textbox', { name: 'Email*', exact: true });
-    this.phoneField = page.getByRole('textbox', { name: 'Phone', exact: true });
-    this.companyField = page.getByRole('textbox', { name: 'Company name*', exact: true });
-    this.messageField = page.getByRole('textbox', { name: /optional.*details/i });
-    this.privacyCheckbox = page.getByRole('checkbox');
-    this.submitButton = page.getByRole('button', { name: 'Submit now' });
-    this.recaptchaError = page.getByText('Submission Failed, reCaptcha spam prevention');
-    this.successMessage = page.getByText(/form.*submitted.*successfully|thank.*you.*submission/i);
-  }
+    private environment = EnvironmentFactory.create();
 
-  async navigateToHomePage(): Promise<void> {
-    await this.page.goto(this.environment.baseUrl);
-    await this.waitForPageLoad();
-  }
+    constructor(page: Page) {
+        super(page);
 
-  async scrollToContactForm(): Promise<void> {
-    await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  }
+        // ARIA locators based on website exploration findings
+        this.nameField = page.getByRole('textbox', {name: 'Name*', exact: true});
+        this.emailField = page.getByRole('textbox', {name: 'Email*', exact: true});
+        this.phoneField = page.getByRole('textbox', {name: 'Phone', exact: true});
+        this.companyField = page.getByRole('textbox', {name: 'Company name*', exact: true});
+        this.messageField = page.getByRole('textbox', {name: /optional.*details/i});
+        this.privacyCheckbox = page.getByRole('checkbox');
+        this.submitButton = page.getByRole('button', {name: 'Submit now'});
+        this.recaptchaError = page.getByText('Submission Failed, reCaptcha spam prevention');
+        this.successMessage = page.getByText(/form.*submitted.*successfully|thank.*you.*submission/i);
+    }
 
-  async fillAndSubmitContactForm(name: string, email: string, phone: string, company: string, message: string): Promise<void> {
-    await this.nameField.fill(name);
-    await this.emailField.fill(email);
-    await this.phoneField.fill(phone);
-    await this.companyField.fill(company);
-    await this.messageField.fill(message);
-    await this.privacyCheckbox.check({ force: true });
-    await this.submitButton.click();
-  }
+    async navigateToHomePage(): Promise<void> {
+        await this.page.goto(this.environment.baseUrl);
+        await this.waitForPageLoad();
+    }
 
-  async verifyFormSubmissionResult(): Promise<boolean> {
-    const isRecaptchaError = await this.recaptchaError.isVisible();
-    const isSuccess = await this.successMessage.isVisible();
-    return isRecaptchaError || isSuccess;
-  }
+    async scrollToContactForm(): Promise<void> {
+        await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    }
+
+    async fillAndSubmitContactForm(name: string, email: string, phone: string, company: string, message: string): Promise<void> {
+        await this.nameField.fill(name);
+        await this.emailField.fill(email);
+        await this.phoneField.fill(phone);
+        await this.companyField.fill(company);
+        await this.messageField.fill(message);
+        await this.privacyCheckbox.check({force: true});
+        await this.submitButton.click();
+    }
+
+    async verifyFormSubmissionResult(): Promise<boolean> {
+        const isRecaptchaError = await this.recaptchaError.isVisible();
+        const isSuccess = await this.successMessage.isVisible();
+        return isRecaptchaError || isSuccess;
+    }
 }
