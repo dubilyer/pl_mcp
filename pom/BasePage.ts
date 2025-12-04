@@ -22,7 +22,7 @@ export class BasePage {
     this.page = page;
     
     this.skipperLogo = page.getByRole('img', { name: /skipper.*logo/i });
-    this.hamburgerMenuButton = page.getByRole('button', { name: /menu|navigation/i });
+    this.hamburgerMenuButton = page.locator('.mobile-toggle, [class*="mobile-toggle"], [class*="nav-toggle"], [class*="menu-toggle"]').first();
     this.navigationMenuOverlay = page.getByRole('navigation');
     this.menuCloseButton = page.getByRole('button', { name: /close.*menu/i });
     
