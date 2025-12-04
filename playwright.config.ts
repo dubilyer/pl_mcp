@@ -30,7 +30,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: environment.baseUrl,
-        headless: environment.headless,
+        headless: true,
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',

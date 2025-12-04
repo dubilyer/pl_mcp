@@ -7,8 +7,7 @@
       "password": "testpass123",
       "apiKey": "dev-api-key"
     },
-    "timeout": 30000,
-    "headless": false
+    "timeout": 30000
   },
   "staging": {
     "baseUrl": "https://staging.skipper-soft.com",
@@ -18,8 +17,7 @@
       "password": "stagingpass123",
       "apiKey": "staging-api-key"
     },
-    "timeout": 45000,
-    "headless": true
+    "timeout": 45000
   },
   "prod": {
     "baseUrl": "https://www.skipper-soft.com",
@@ -30,7 +28,6 @@
       "apiKey": ""
     },
     "timeout": 60000,
-    "headless": true,
     "useEnvCredentials": true
   }
 }

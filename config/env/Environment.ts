@@ -15,7 +15,6 @@ export interface IEnvironment {
     apiKey?: string;
   };
   timeout: number;
-  headless: boolean;
   useEnvCredentials?: boolean;
 }
 
@@ -28,14 +27,12 @@ export class Environment implements IEnvironment {
     apiKey?: string;
   };
   public timeout: number;
-  public headless: boolean;
   public useEnvCredentials?: boolean;
 
   constructor(config: IEnvironment) {
     this.baseUrl = config.baseUrl;
     this.apiBaseUrl = config.apiBaseUrl;
     this.timeout = config.timeout;
-    this.headless = config.headless;
     this.useEnvCredentials = config.useEnvCredentials;
 
     // Handle environment-specific credentials
