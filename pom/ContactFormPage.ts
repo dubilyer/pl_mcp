@@ -1,16 +1,19 @@
-import { expect, type Page } from '@playwright/test';
+import { type Page, type Locator } from '@playwright/test';
 import { BasePage } from '@/pom/BasePage';
+import { EnvironmentFactory } from '@/config/env/EnvironmentFactory';
 
 export class ContactFormPage extends BasePage {
-  private nameField;
-  private emailField;
-  private phoneField;
-  private companyField;
-  private messageField;
-  private privacyCheckbox;
-  private submitButton;
-  private recaptchaError;
-  private successMessage;
+  private nameField: Locator;
+  private emailField: Locator;
+  private phoneField: Locator;
+  private companyField: Locator;
+  private messageField: Locator;
+  private privacyCheckbox: Locator;
+  private submitButton: Locator;
+  private recaptchaError: Locator;
+  private successMessage: Locator;
+  
+  private environment = EnvironmentFactory.create();
 
   constructor(page: Page) {
     super(page);
@@ -28,7 +31,7 @@ export class ContactFormPage extends BasePage {
   }
 
   async navigateToHomePage(): Promise<void> {
-    await this.page.goto('https://www.skipper-soft.com');
+    await this.page.goto(this.environment.baseUrl);
     await this.waitForPageLoad();
   }
 

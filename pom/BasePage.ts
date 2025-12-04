@@ -22,7 +22,7 @@ export class BasePage {
     this.page = page;
     
     this.skipperLogo = page.getByRole('img', { name: /skipper.*logo/i });
-    this.hamburgerMenuButton = page.locator('.mobile-toggle, [class*="mobile-toggle"], [class*="nav-toggle"], [class*="menu-toggle"]').first();
+    this.hamburgerMenuButton = page.locator('.mobile-toggle, [class*="mobile-toggle"], [class*="nav-toggle"], [class*="menu-toggle"]').first(); // #BadLocator: Multiple CSS classes for responsive menu, .first() needed due to inconsistent mobile menu implementations across pages
     this.navigationMenuOverlay = page.getByRole('navigation');
     this.menuCloseButton = page.getByRole('button', { name: /close.*menu/i });
     

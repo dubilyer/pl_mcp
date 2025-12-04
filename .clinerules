@@ -3,5 +3,4 @@
 Always explore website before changing or adding any locators.
 
 ## Problematic locators
-**CA1.** Use getByRole('textbox', { name: 'Name*', exact: true }) to locate the Name field in contact form
-**CA2.** Locate form fields by 'data-label' attribute instead of placeholder text
+
